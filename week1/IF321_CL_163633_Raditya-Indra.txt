@@ -1,0 +1,84 @@
+
+Sistem KRS Universtias Multimedia Nusantara
+
+===========================================
+-------------------------------------------
+===========================================
+
+1. Mahasiswa
+- nim_mahasiswa
+    #Data Type = String (Char 6)
+    #Constraint = Primary Key
+    #Keterangan = Identitas Unik untuk Mahasiswa, dengan berisi 6 angka(contoh = 163633)
+- nama_mahasiswa
+    #Data Type = String (Varchar 50)
+    #Keterangan = Nama Lengkap Mahasiswa
+- program_studi
+    #Data Type = String (Varchar 50)
+    #Keterangan = Jurusan atau prodi Mahasiswa
+- semester_mahasiswa
+    #Data Type = Int
+    #Keterangan = Posisi semester Mahasiswa saat ini
+
+===========================================
+-------------------------------------------
+===========================================
+
+2. Mata Kuliah
+- kode_mk
+    #Data Type = String (Char 5)
+    #Constraint = Primary Key
+    #Keterangan = Kode unik mata kuliah (Contoh : IF352, CE234)
+- nama_mk
+    #Data Type = String (Varchar 50)
+    #Keterangan = Nama mata kuliah (Contoh : Linear Algebra, Operating System)
+- sks
+    #Data Type = Int
+    #Keterangan = Jumlah satuan kredit semester
+- kuota_kelas
+    #Data Type = Int
+    #Keterangan = Batas maksimal jumlah mahasiswa yang bisa mengambil kelas tersebut
+
+===========================================
+-------------------------------------------
+===========================================
+
+3. Dosen
+- nip_dosen
+    #Data Type = String (Char 10)
+    #Constraint = Primary Key
+    #Keterangan = Identitas unik untuk Dosen yang mengajar
+- nama_dosen
+    #Data Type = String (Varchar 50)
+    #Keterangan = Nama lengkap Dosen
+
+===========================================
+-------------------------------------------
+===========================================
+
+4. KRS
+- id_krs
+    #Data Type = Int
+    #Constraint = Primary Key
+    #Keterangan = Identitas unik untuk lembar transaksi KRS
+- nim_mahasiswa
+    #Data Type = String (Char 6)
+    #Constraint = Foreign Key (Mahasiswa)
+    #Keterangan = Menghubungkan ke Mahasiswa yang memilih KRS
+- kode_mk
+    #Data Type = String (Char 5)
+    #Constraint = Foreign Key (Mata Kuliah)
+    #Keterangan = Menghubungkan ke Mata Kuliah yang diambil
+- nip_dosen
+    #Data Type = String (Char 10)
+    #Constraint = Foreign Key (Dosen)
+    #Keterangan = Menghubungkan ke Dosen Pengampu / Pembimbing
+- tahun_akademik
+    #Data Type = String (Varchar 9)
+    #Keterangan = Periode tahun ajaran (Contoh : 2024/2025)
+- semester_akademik
+    #Data Type = String (Varchar 6)
+    #Keterangan = Periode semester berjalan (Contoh : Ganjil / Genap)
+- status_persetujuan
+    #Data Type = String (Varchar 10)
+    #Keterangan = Status persetujuan dari dosen wali (Contoh : Pending, Approved, Rejected)
