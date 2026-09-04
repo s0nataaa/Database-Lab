@@ -1,0 +1,20 @@
+#dbdiagram.io Syntax
+
+Table Order {
+  IDOrder varchar [primary key]
+  NomorMeja int
+  JamMasuk time
+  JamKeluar time
+}
+
+Table Menu {
+  IDMenu varchar [primary key]
+  NamaMenu varchar
+  Kategori varchar
+  Harga int
+}
+
+Table OrderDetail {
+  IDOrder varchar [ref: >? Order.IDOrder]
+  IDMenu varchar [ref: >? Menu.IDMenu]
+}
