@@ -41,3 +41,14 @@ VALUES
     ("PR002", "PD003"),
     ("PR002", "PD005");
 
+#--Helping Command--
+SHOW TABLES;
+
+DESCRIBE calon;
+DESCRIBE pemilih;
+DESCRIBE pemilihan;
+
+SELECT * FROM Calon;
+SELECT * FROM Pemilih;
+SELECT * FROM Pemilihan;
+
