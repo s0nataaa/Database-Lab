@@ -12,6 +12,6 @@ Table Pemilih {
 }
 
 Table Pemilihan {
-  ID_Calon varchar [ref: > Calon.ID_Calon]
-  ID_Pemilih varchar [ref: > Pemilih.ID_Pemilih]
+  ID_Calon varchar [ref: >? Calon.ID_Calon]
+  ID_Pemilih varchar [ref: >? Pemilih.ID_Pemilih]
 }
