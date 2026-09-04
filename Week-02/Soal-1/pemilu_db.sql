@@ -3,13 +3,13 @@ use pemilu_db;
 
 create Table Calon (
     ID_Calon VARCHAR(5) PRIMARY KEY,
-    nama_calon VARCHAR(50)
+    nama_calon VARCHAR(50) NOT NULL
 );
 
 create table Pemilih (
     ID_Pemilih VARCHAR(5) PRIMARY KEY,
-    nama_pemilih VARCHAR(50),
-    nomor_telepon_penduduk VARCHAR(7)
+    nama_pemilih VARCHAR(50) NOT NULL,
+    nomor_telepon_penduduk VARCHAR(7) NOT NULL
 );
 
 create Table Pemilihan (
