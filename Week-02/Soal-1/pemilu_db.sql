@@ -1,3 +1,4 @@
+--PEMILU DATABASE--
 create DATABASE pemilu_db;
 use pemilu_db;
 
