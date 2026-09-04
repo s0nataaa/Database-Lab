@@ -1,0 +1,17 @@
+#dbdiagram.io Syntax
+
+Table Calon {
+  ID_Calon varchar [primary key]
+  Nama_Calon varchar
+}
+
+Table Pemilih {
+  ID_Pemilih varchar [primary key]
+  nama_pemilih varchar
+  nomor_telepon_penduduk varchar
+}
+
+Table Pemilihan {
+  ID_Calon varchar [ref: > Calon.ID_Calon]
+  ID_Pemilih varchar [ref: > Pemilih.ID_Pemilih]
+}
