@@ -44,11 +44,11 @@ VALUES
 #--Helping Command--
 SHOW TABLES;
 
-DESCRIBE calon;
-DESCRIBE pemilih;
-DESCRIBE pemilihan;
-
 SELECT * FROM Calon;
 SELECT * FROM Pemilih;
 SELECT * FROM Pemilihan;
+
+DESCRIBE calon;
+DESCRIBE pemilih;
+DESCRIBE pemilihan;
 
