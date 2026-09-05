@@ -37,7 +37,7 @@ VALUES
 INSERT into Pemilihan (`ID_Calon`, `ID_Pemilih`) 
 VALUES
     ("PR001", "PD001"),
-    ("PR002", "PD002"),
+    ("PR001", "PD002"),
     ("PR001", "PD004"),
     ("PR002", "PD003"),
     ("PR002", "PD005");
@@ -53,3 +53,6 @@ DESCRIBE calon;
 DESCRIBE pemilih;
 DESCRIBE pemilihan;
 
+UPDATE Pemilihan 
+SET ID_Calon = 'PR001' 
+WHERE ID_Calon = 'PR002' AND ID_Pemilih = 'PD002';
