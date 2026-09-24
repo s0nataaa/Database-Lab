@@ -1,0 +1,23 @@
+Table Bandara {
+  IDBandara int [pk]
+  nama varchar
+  alamat varchar
+  provinsi varchar
+  kota varchar
+}
+
+Table Pesawat {
+  IDPesawat int [pk]
+  nama varchar
+  ID_Bandara int [ref: > Bandara.IDBandara]
+}
+
+Table JadwalPenerbangan {
+  kodeJadwal int [pk]
+  waktuBerangkat datetime
+  harga decimal
+  kotaAsal varchar
+  kotaTujuan varchar
+  ID_Bandara int [ref: > Bandara.IDBandara]
+  ID_Pesawat int [ref: > Pesawat.IDPesawat]
+}

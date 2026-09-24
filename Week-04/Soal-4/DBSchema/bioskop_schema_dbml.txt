@@ -1,0 +1,50 @@
+Table Film {
+  ID_Film int [pk]
+  Judul_Film varchar
+  Durasi int
+  Batas_Umur varchar
+}
+
+Table Genre {
+  ID_Genre int [pk]
+  Nama_Genre varchar
+}
+
+Table Film_Genre {
+  ID_Film int [ref: > Film.ID_Film, not null]
+  ID_Genre int [ref: > Genre.ID_Genre, not null]
+
+  indexes {
+    (ID_Film, ID_Genre) [pk]
+  }
+}
+
+Table Jadwal {
+  Kode_Jadwal int [pk]
+  Waktu_Tayang datetime
+  Studio varchar
+  ID_Film int [ref: > Film.ID_Film, not null]
+}
+
+Table Pembeli {
+  ID_Pembeli int [pk]
+  Nama_Depan varchar
+  Nama_Belakang varchar
+  Email varchar
+  Alamat varchar
+  Kota varchar
+  Kode_Pos varchar
+}
+
+Table Kartu {
+  Kode_Kartu int [pk]
+  Saldo decimal
+  ID_Pembeli int [ref: - Pembeli.ID_Pembeli, not null]
+}
+
+Table Pemesanan {
+  ID_Pemesanan int [pk, increment]
+  Kode_Kartu int [ref: > Kartu.Kode_Kartu, not null]
+  Kode_Jadwal int [ref: > Jadwal.Kode_Jadwal, not null]
+  Tanggal_Pesan datetime
+}

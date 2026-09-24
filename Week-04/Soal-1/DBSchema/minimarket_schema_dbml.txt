@@ -1,0 +1,19 @@
+Table Karyawan {
+  ID int [pk]
+  namaDepan varchar
+  namaBelakang varchar
+  email varchar
+  alamat varchar
+  kota varchar
+  kodePos varchar
+  noHP varchar
+  ID_Supervisor int [ref: > Karyawan.ID]
+  Kode_Minimarket int [ref: > Minimarket.Kode]
+}
+
+Table Minimarket {
+  Kode int [pk]
+  alamat varchar
+  kota varchar
+  kodePos varchar
+}

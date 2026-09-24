@@ -1,0 +1,35 @@
+Table Pembeli {
+  ID int [pk]
+  namaDepan varchar
+  namaBelakang varchar
+  email varchar
+  alamat varchar
+}
+
+Table Telepon_Pembeli {
+  ID_Pembeli int [ref: > Pembeli.ID]
+  nomorTelepon varchar
+
+  indexes {
+    (ID_Pembeli, nomorTelepon) [pk]
+  }
+}
+
+Table Terrarium {
+  kode int [pk]
+  berat decimal
+  stock int
+}
+
+Table Kurir {
+  kode int [pk]
+  tipe varchar
+}
+
+Table Order {
+  ID_Order int [pk, increment]
+  ID_Pembeli int [ref: > Pembeli.ID]
+  Kode_Terrarium int [ref: > Terrarium.kode]
+  Kode_Kurir int [ref: > Kurir.kode]
+  jumlahOrder int
+}

@@ -1,0 +1,50 @@
+Table Bus {
+  ID_Bus int [pk]
+  Nama_Bus varchar
+  Tipe_Bus varchar
+  Jumlah_Penumpang_Maks int
+  Plat_Nomor varchar
+}
+
+Table Operator {
+  ID_Operator int [pk]
+  Nama_Depan varchar
+  Nama_Belakang varchar
+  Nomor_HP varchar
+  Alamat_Detail varchar
+  Kota varchar
+  Kode_Pos varchar
+  ID_Bus int [ref: > Bus.ID_Bus]
+  Kode_Rute int [ref: > Rute.Kode_Rute]
+  Waktu_Mulai_Tugas datetime
+}
+
+Table Halte {
+  Kode_Halte int [pk]
+  Nama_Halte varchar
+  Kota varchar
+  Alamat_Lengkap varchar
+}
+
+Table Rute {
+  Kode_Rute int [pk]
+  Panjang_Rute decimal
+}
+
+Table Rute_Halte {
+  Kode_Rute int [ref: > Rute.Kode_Rute]
+  Kode_Halte int [ref: > Halte.Kode_Halte]
+
+  indexes {
+    (Kode_Rute, Kode_Halte) [pk]
+  }
+}
+
+Table Keluarga_Operator {
+  ID_Keluarga int [pk, increment]
+  ID_Operator int [ref: > Operator.ID_Operator]
+  Nama_Anggota varchar
+  Hubungan varchar
+  Jenis_Kelamin varchar
+  Tanggal_Lahir date
+}
