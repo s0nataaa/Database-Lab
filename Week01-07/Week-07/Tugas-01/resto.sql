@@ -1,6 +1,6 @@
-create database ikea;
+create database resto;
 SELECT database();
-use ikea;
+use resto;
 
 CREATE Table Menu (
     id_menu VARCHAR(5) PRIMARY KEY,
@@ -96,8 +96,9 @@ INSERT INTO `transaction` (id_customer, id_employee, id_paket, transaction_date)
 ('C0010', 'E0005', 'P0001', '2016-08-18');
 
 ----show nama customer and order by ascending---
-SELECT CONCAT(nama_depan, ' ', nama_belakang) as Nama Customer from customer
-ORDER BY nama_customer ASC;
+SELECT CONCAT(nama_depan, ' ', nama_belakang) as `Nama Customer` 
+from customer
+ORDER BY `nama Customer` ASC;
 
 ----show bulan dan jumlah dari tiap transaksi-----
 SELECT MONTHNAME(transaction_date) as Bulan, COUNT(*) as Jumlah 
@@ -141,5 +142,67 @@ end as `Kategori Waktu Transaksi`
 from `transaction`
 having `Kategori Waktu Transaksi` IS NOT NULL
 order by transaction_date asc, `Kategori Waktu Transaksi` desc;
+
+--show limit 1 customer dengan nama terpanjang---
+SELECT CONCAT(nama_depan, ' ', nama_belakang) as Nama
+from customer
+order by CHARACTER_LENGTH(Nama) desc
+limit 1;
+
+---show employee name char len asc---
+SELECT CONCAT(nama_depan, ' ', nama_belakang) as Nama
+from employee
+order by CHARACTER_LENGTH(Nama) ASC;
+
+--- show employee, customer list, total pendapatan---
+SELECT CONCAT(e.nama_depan, ' ', e.nama_belakang) as `Nama Karyawan`,
+
+GROUP_CONCAT (
+    if (
+        c.nama_belakang = '',
+        c.nama_depan,
+        CONCAT(c.nama_depan, ' ', c.nama_belakang)
+    )
+    order by c.nama_depan asc, c.nama_belakang asc
+) as `Nama Customer`,
+
+SUM(p.harga_paket) as Harga
+
+from `transaction` t
+join customer c on t.id_customer = c.id_customer
+join employee e on t.id_employee = e.id_employee
+join paket p on t.id_paket = p.id_paket
+group by e.id_employee
+order BY Harga desc
+limit 1;
+
+
+---hashing---
+SELECT
+LOWER(CONCAT(i, penapple, alamatReplace)) AS Hashing
+FROM (
+    SELECT i, penapple, newAlamat,
+        CASE
+            WHEN MOD(CHAR_LENGTH(newAlamat), 3) = 0
+                THEN LEFT(REVERSE(newAlamat), 4)
+            WHEN MOD(CHAR_LENGTH(newAlamat), 3) = 1
+                THEN newAlamat
+            ELSE REVERSE(newAlamat)
+        END AS alamatReplace
+    FROM (
+        SELECT
+            REVERSE(LEFT(LOWER(nama_depan), 3)) AS i,
+            CASE
+                WHEN MOD(CHAR_LENGTH(CONCAT(nama_depan, nama_belakang)), 3) = 0
+                    THEN 'pen'
+                WHEN MOD(CHAR_LENGTH(CONCAT(nama_depan, nama_belakang)), 3) = 1
+                    THEN 'apple'
+                ELSE 'pineapple'
+            END AS penapple,
+            SUBSTRING_INDEX(SUBSTRING_INDEX(LOWER(alamat), ' ', 2), ' ', -1) AS newAlamat
+        FROM customer
+    ) AS data_customer
+) hash
+ORDER BY Hashing;
 
 
