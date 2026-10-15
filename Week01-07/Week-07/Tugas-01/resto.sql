@@ -113,10 +113,12 @@ AND gaji = (SELECT MIN(gaji) FROM employee where email like '%@gmail.com');
 ---show id_employee, banyak transaksi, jadwal transaksi AND pekerja minimal 1 transaksi, order by desc---
 SELECT id_employee as `Kode Pekerja`, 
 COUNT(*) as `Banyak Transaksi`,
-GROUP_CONCAT(DAY(transaction_date), ' ', MONTHNAME(transaction_date), ' ', YEAR(transaction_date)) as `Jadwal Transaksi`
+GROUP_CONCAT(
+    CONCAT(DAY(transaction_date), ' ', MONTHNAME(transaction_date), ' ', YEAR(transaction_date))
+    ) as `Jadwal Transaksi`
 from `transaction`
 group by id_employee
-having count (id_employee) >= 1
+having count(id_employee) >= 1
 ORDER BY `Banyak Transaksi` DESC;
 
 ---show jumlah penggunail email from employee---
@@ -134,7 +136,7 @@ ORDER BY nama asc;
 
 ---show trans_date, desc if trans_date < april 2016 = transaksi lama else if trans_date >= mei 2016 = transaksi baru---
 select 
-CONCAT(DAY(transaction_date), ' ', MONTHNAME(transaction_date), ' ', YEAR(transaction_date)) as `Waktu Transaksi`,
+DATE_FORMAT(transaction_date, '%d %M %Y') AS `Waktu Transaksi`,
 case 
 when transaction_date < '2016-05-01' AND transaction_date >= '2016-03-01' then 'Transaksi Lama'
 when transaction_date >= '2016-05-01' AND transaction_date < '2016-09-01' then 'Transaksi Baru'
@@ -156,14 +158,13 @@ order by CHARACTER_LENGTH(Nama) ASC;
 
 --- show employee, customer list, total pendapatan---
 SELECT CONCAT(e.nama_depan, ' ', e.nama_belakang) as `Nama Karyawan`,
-
-GROUP_CONCAT (
-    if (
+GROUP_CONCAT(
+    if(
         c.nama_belakang = '',
         c.nama_depan,
         CONCAT(c.nama_depan, ' ', c.nama_belakang)
     )
-    order by c.nama_depan asc, c.nama_belakang asc
+    SEPARATOR ', '
 ) as `Nama Customer`,
 
 SUM(p.harga_paket) as Harga

@@ -1,5 +1,5 @@
-use ikea;;
 
+use ikea;;
 
 --------------------------------------------------------------
 SELECT
@@ -52,11 +52,21 @@ JOIN employees e ON j.jobID = e.jobID
 group by j.jobid, j.jobdesc;
 
 ---metod from product dan jumlahnya---
-select p.productname as Products, p.stock
-from products p
-join producttype y on p.typeid = y.TypeID
-where y.Typename like '%METOD%'
-ORDER BY y.TypeName ASC;
+SELECT Products 
+FROM (
+    SELECT p.productname AS Products, 1 AS sort_order
+    FROM products p
+    JOIN producttype y ON p.typeid = y.TypeID
+    WHERE y.Typename LIKE '%METOD%'
+
+    UNION ALL
+
+    SELECT CONCAT('Found ', COUNT(*), ' results') AS Products, 2 AS sort_order
+    FROM products p
+    JOIN producttype y ON p.typeid = y.TypeID
+    WHERE y.Typename LIKE '%METOD%'
+) AS final_result
+ORDER BY sort_order ASC, Products DESC;
 
 ---manager pindah dept---
 select
@@ -74,10 +84,8 @@ join forderdetails f on r.f_orderid = f.F_orderid
 where r.F_OrderDate >= '2015-01-01' AND r.F_OrderDate < '2015-02-01'
 group by r.f_orderid with ROLLUP;
 
-
-
+---show employeename, jobdesc, work time, orderby total work time desc ---
 SELECT
-    e.EmployeeID,
     CONCAT(e.FirstName, ' ', e.LastName) AS Name,
     j.JobDesc AS Job,
     COUNT(*) AS Total_Record
@@ -115,11 +123,14 @@ order by orderid asc;
 ---show nama karyawan beserta nama managernya---
 SELECT 
 concat(m.Firstname, ' ', m.Lastname) as Manager,
-group_concat(concat(e.Firstname, ' ', e.Lastname)) as Employee
+group_concat(
+    concat(e.Firstname, ' ', e.Lastname)
+    ) as Employee
 from employees e
 join employees m on e.ManagerID = m.EmployeeID
 where m.ManagerID is NULL
 GROUP BY m.EmployeeID;
+
 
 
 
