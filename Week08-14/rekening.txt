@@ -1,0 +1,572 @@
+/*1. name, deptname, asc*/
+select concat(e.FirstName, ' ', e.LastName) as Name,
+d.DeptName
+from employees e
+join depts d on e.`DeptID` = d.`DeptID`
+order by d.deptName ASC;
+
++--------------------+-------------------+
+| Name               | DeptName          |
++--------------------+-------------------+
+| Mildred Sanders    | Bathroom          |
+| Jim Love           | Bedroom           |
+| Ignacio Richardson | Bedroom           |
+| Paula Tuckers      | Children's IKEA   |
+| Leah Webber        | Children's IKEA   |
+| Dominicus Owen     | Cooking           |
+| Irma Luna          | Cooking           |
+| Clay Young         | Decoration        |
+| Maurice Ford       | Decoration        |
+| Alfredo Cooper     | Dining            |
+| Estelle Burton     | Dining            |
+| Melanie Pierce     | Eating            |
+| Kevin Padawangi    | Foods & Beverages |
+| Raul Diaz          | Foods & Beverages |
+| Martha Mills       | Foods & Beverages |
+| Geranld Phelps     | Foods & Beverages |
+| Jan Long           | Hallway           |
+| Christine Ingram   | Hallway           |
+| Leticia Hampton    | Laundry           |
+| Audrey Robertson   | Laundry           |
+| Kendra Jonston     | Lighting          |
+| Cary Santiago      | Lighting          |
+| Camille Edwards    | Living Room       |
+| Santago Goodwin    | Living Room       |
+| Jeremy Evan        | METOD Kitchen     |
+| Philip Burns       | METOD Kitchen     |
+| Wilma George       | METOD Kitchen     |
+| Aaron Moreno       | METOD Kitchen     |
+| Ted Stokes         | METOD Kitchen     |
+| Cecil Wade         | METOD Kitchen     |
+| Leah Caldwell      | Outdoor           |
+| Sue Price          | Outdoor           |
+| Ivan Jeremy        | Secondary Storage |
+| Vellma Carr        | Secondary Storage |
+| Jenna May          | Secondary Storage |
+| Pete Cain          | Small Storage     |
+| Alice Fields       | Small Storage     |
+| Ruth Mitchell      | Textiles & Rugs   |
+| Olga Barrett       | Textiles & Rugs   |
+| Mindy Cannon       | Workspaces        |
+| Spencer Watts      | Workspaces        |
++--------------------+-------------------+
+
+/*2. name employee, name manager, asc*/
+select CONCAT(e.FirstName, ' ', e.lastname) as `Employee Name`,
+CONCAT(m.FirstName, ' ', m.LastName) as `Manager Name`
+from employees e
+join employees m on e.`ManagerID` = m.`EmployeeID`
+order by m.`FirstName`, e.`FirstName` asc;
+
++--------------------+-----------------+
+| Employee Name      | Manager Name    |
++--------------------+-----------------+
+| Ignacio Richardson | Dominicus Owen  |
+| Irma Luna          | Dominicus Owen  |
+| Jeremy Evan        | Dominicus Owen  |
+| Jim Love           | Dominicus Owen  |
+| Leah Webber        | Dominicus Owen  |
+| Maurice Ford       | Dominicus Owen  |
+| Olga Barrett       | Dominicus Owen  |
+| Spencer Watts      | Dominicus Owen  |
+| Ted Stokes         | Dominicus Owen  |
+| Alfredo Cooper     | Ivan Jeremy     |
+| Christine Ingram   | Ivan Jeremy     |
+| Jenna May          | Ivan Jeremy     |
+| Leticia Hampton    | Ivan Jeremy     |
+| Melanie Pierce     | Ivan Jeremy     |
+| Mindy Cannon       | Ivan Jeremy     |
+| Pete Cain          | Ivan Jeremy     |
+| Philip Burns       | Ivan Jeremy     |
+| Vellma Carr        | Ivan Jeremy     |
+| Aaron Moreno       | Kevin Alexander |
+| Alice Fields       | Kevin Padawangi |
+| Audrey Robertson   | Kevin Padawangi |
+| Camille Edwards    | Kevin Alexander |
+| Cary Santiago      | Kevin Alexander |
+| Cecil Wade         | Kevin Padawangi |
+| Clay Young         | Kevin Alexander |
+| Estelle Burton     | Kevin Padawangi |
+| Jan Long           | Kevin Alexander |
+| Kendra Jonston     | Kevin Alexander |
+| Leah Caldwell      | Kevin Alexander |
+| Martha Mills       | Kevin Padawangi |
+| Mildred Sanders    | Kevin Padawangi |
+| Paula Tuckers      | Kevin Alexander |
+| Raul Diaz          | Kevin Padawangi |
+| Ruth Mitchell      | Kevin Alexander |
+| Santago Goodwin    | Kevin Padawangi |
+| Sue Price          | Kevin Padawangi |
+| Wilma George       | Kevin Alexander |
++--------------------+-----------------+
+
+/*3. name employee, data orders dengan separator -, order by name employee desc*/
+SELECT CONCAT(e.FirstName, ' ', e.LastName) as Name,
+group_concat(o.orderID SEPARATOR ' - ') as Orders
+from employees e
+join orders o on e.`EmployeeID` = o.`EmployeeID`
+group by e.`EmployeeID`, e.`FirstName`, e.`LastName`
+order BY Name ASC;
+
++------------------+-----------------------+
+| Name             | Orders                |
++------------------+-----------------------+
+| Alfredo Cooper   | OR001 - OR017         |
+| Audrey Robertson | OR009 - OR020 - OR015 |
+| Camille Edwards  | OR002                 |
+| Cecil Wade       | OR011                 |
+| Clay Young       | OR014 - OR018         |
+| Jan Long         | OR007                 |
+| Kendra Jonston   | OR013                 |
+| Maurice Ford     | OR006                 |
+| Melanie Pierce   | OR005                 |
+| Mildred Sanders  | OR019                 |
+| Mindy Cannon     | OR016 - OR003         |
+| Paula Tuckers    | OR004                 |
+| Santago Goodwin  | OR008                 |
+| Vellma Carr      | OR010                 |
+| Wilma George     | OR012                 |
++------------------+-----------------------+
+
+/*4. select all product + total sold where sold minimal 1x*/
+SELECT p.productname as `Product name`,
+sum(o.qty) as `Total Sold`
+from products p
+join orderdetails o on p.`ArticleID` = o.`ArticleID`
+GROUP BY p.`ArticleID`
+ORDER BY `Total Sold` desc;
+
++---------------------------------------+------------+
+| Product name                          | Total Sold |
++---------------------------------------+------------+
+| BYGEL Container                       |         10 |
+| HORDA Open cabinet, wood effect       |          8 |
+| ATTEST Knob                           |          6 |
+| EKER├ûN Seat/back cushion              |          4 |
+| ASKHOLMEN Balcony table               |          4 |
+| MAXIMERA Divider for high drawer      |          4 |
+| UTRSTA Door damper for hinge          |          4 |
+| ERIKSDAL Handle                       |          3 |
+| ANSLUTA Intermediate connection cord  |          2 |
+| ALBERT Shelving unit                  |          2 |
+| ANSLUTA Power supply cord             |          2 |
+| HENRIKSDAL Chair cover                |          2 |
+| BLANKETT Handle                       |          1 |
+| KLASEN Charcoal barbecue              |          1 |
+| ALGOT Wall upright/shelf/hook         |          1 |
+| DYNING Canopy                         |          1 |
+| ├äPPLAR├û Sun lounger                   |          1 |
+| FIXA Rear edge trim for worktop       |          1 |
+| TUNHOLMEN Table                       |          1 |
+| ATLANT Pop-up drainer                 |          1 |
+| BILLSTA Table top                     |          1 |
+| BILLSTA Bar table                     |          1 |
+| LEIFARNE Seat shell                   |          1 |
+| BJURSTA Extendable table              |          1 |
+| ARKELSTORP Sideboard                  |          1 |
+| HODDE Rug                             |          1 |
+| STORN├äS / KAUSTBY Table and 4 chairs  |          1 |
+| ELVERDAM Kitchen mixer tap            |          1 |
+| KARLS├û Gazebo with curtains           |          1 |
++---------------------------------------+------------+
+
+/*5. no 4 tapi pake left join*/
+SELECT p.productname as `Product name`,
+coalesce(sum(o.qty), 0) as `Total Sold`
+from products p
+left join orderdetails o on p.`ArticleID` = o.`ArticleID`
+GROUP BY p.`ArticleID`
+ORDER BY `Total Sold` desc;
+
++----------------------------------------------+------------+
+| Product name                                 | Total Sold |
++----------------------------------------------+------------+
+| BYGEL Container                              |         10 |
+| HORDA Open cabinet, wood effect              |          8 |
+| ATTEST Knob                                  |          6 |
+| EKER├ûN Seat/back cushion                     |          4 |
+| UTRSTA Door damper for hinge                 |          4 |
+| ASKHOLMEN Balcony table                      |          4 |
+| MAXIMERA Divider for high drawer             |          4 |
+| ERIKSDAL Handle                              |          3 |
+| ALBERT Shelving unit                         |          2 |
+| ANSLUTA Power supply cord                    |          2 |
+| ANSLUTA Intermediate connection cord         |          2 |
+| HENRIKSDAL Chair cover                       |          2 |
+| ATLANT Pop-up drainer                        |          1 |
+| BJURSTA Extendable table                     |          1 |
+| ELVERDAM Kitchen mixer tap                   |          1 |
+| DYNING Canopy                                |          1 |
+| TUNHOLMEN Table                              |          1 |
+| BILLSTA Bar table                            |          1 |
+| BILLSTA Table top                            |          1 |
+| BLANKETT Handle                              |          1 |
+| HODDE Rug                                    |          1 |
+| LEIFARNE Seat shell                          |          1 |
+| STORN├äS / KAUSTBY Table and 4 chairs         |          1 |
+| ├äPPLAR├û Sun lounger                          |          1 |
+| FIXA Rear edge trim for worktop              |          1 |
+| KLASEN Charcoal barbecue                     |          1 |
+| ARKELSTORP Sideboard                         |          1 |
+| KARLS├û Gazebo with curtains                  |          1 |
+| ALGOT Wall upright/shelf/hook                |          1 |
+| Swedish Poached Salmon                       |          0 |
+| BEKVAM Kitchen trolley                       |          0 |
+| S├äR├û Chair cushion                           |          0 |
+| SANDSJON Single-lever kitchen mixer tap      |          0 |
+| FYNDIG Wall cabinet with door                |          0 |
+| DETOLF Glass-door cabinet                    |          0 |
+| LILL├ûN Charcoal barbecue                     |          0 |
+| FIXA Worktop cover strip                     |          0 |
+| ├äPPLAR├û Drop-leaf table                      |          0 |
+| Godis Snogubbe                               |          0 |
+| BYGEL Trolley                                |          0 |
+| ├äPPLAR├û Bench w panel+ shelves               |          0 |
+| FYNDIG Base cabinet for oven                 |          0 |
+| SKRUV Extension cable                        |          0 |
+| ATTEST Handle                                |          0 |
+| KLASEN Charcoal barbecue with trolley        |          0 |
+| FRED├ûN Hammock                               |          0 |
+| FIXA Connectors for insert sink/hob          |          0 |
+| Chicken Hot dog                              |          0 |
+| FASTBO Wall panel                            |          0 |
+| INGATORP / STEFAN Table and 2 chairs         |          0 |
+| METOD Corner wall cab w carousel/glass dr    |          0 |
+| EKBACKEN Worktop                             |          0 |
+| UTRUSTA Cleaning interior                    |          0 |
+| BILLSTA Rectangular underframe               |          0 |
+| FYNDIG Base cabinet w door and drawer        |          0 |
+| TOSTERUP Handle                              |          0 |
+| BRORINGE Underframe                          |          0 |
+| Kids Pasta                                   |          0 |
+| GAMLEBY Wall shelf                           |          0 |
+| VEDDINGE Door                                |          0 |
+| SKRUV LED lighting chain with 48 lights      |          0 |
+| JANINGE Bar stool                            |          0 |
+| Cinnamon Bun                                 |          0 |
+| BOTKYRKA Wall shelf                          |          0 |
+| FASTBO Rail for wall panel                   |          0 |
+| APPLARO Chair with armrests                  |          0 |
+| Pepparkaka figurer                           |          0 |
+| FRODE Folding chair                          |          0 |
+| FORVARA Drawer                               |          0 |
+| GRUNDTAL Kitchen trolley                     |          0 |
+| FORHOJA Kitchen trolley                      |          0 |
+| Kaka Chokladtryffel                          |          0 |
+| TARNO Chair                                  |          0 |
+| Select of drinks                             |          0 |
+| L├äCK├û Shelving unit                          |          0 |
+| RUNNEN Floor decking                         |          0 |
+| ALGOT Wall upright/shelf/basket              |          0 |
+| MORUM Rug                                    |          0 |
+| ALGOT Wall upright/basket                    |          0 |
+| OPLEV Door mat                               |          0 |
+| Tasty ice cream                              |          0 |
+| BRUSALI Cabinet with doors                   |          0 |
+| T├àSINGE Bench cushion                        |          0 |
+| BAGG├ûN Parasol                               |          0 |
+| Salmon Salad                                 |          0 |
+| BOHOLMEN 1 1/2 bowl insert sink with drainer |          0 |
+| SKRUV Transformer/cord/3-way connector       |          0 |
+| RINGHULT Drawer front                        |          0 |
+| Kanelbullar                                  |          0 |
+| ANATOL Brackets for microwave oven           |          0 |
+| V├äRUM Rug                                    |          0 |
+| ANSLUTA Electronic transformer               |          0 |
+| ANSLUTA Remote control                       |          0 |
+| BACKARYD Underframe                          |          0 |
+| VINDALS├û Trolley                             |          0 |
+| JANINGE Chair with armrests                  |          0 |
+| SOLARVET LED lighting chain with 12 lights   |          0 |
+| ALESKAR Kitchen mixer tap with handspray     |          0 |
+| Swedish Apple Cake                           |          0 |
+| ├äPPLAR├û Table/stool section                  |          0 |
+| ├äPPLAR├û Gazebo                               |          0 |
+| FYNDIG Wall cabinet with doors               |          0 |
+| Smoked Salmon                                |          0 |
+| BEKVAM Step stool                            |          0 |
+| FYNDIG Base cabinet with doors               |          0 |
+| H├àLL├û Chair cushion                          |          0 |
+| NORBERG Wall-mounted drop-leaf table         |          0 |
+| BEKVAM Spice rack                            |          0 |
+| FORMAT LED cabinet lighting                  |          0 |
+| FLYTTA Kitchen trolley                       |          0 |
+| IKEA PS V├àG├û Easy chair                      |          0 |
+| AMMER├û Gazebo                                |          0 |
+| KUNGSHOLMEN / KUNGS├û 2-seat sofa             |          0 |
+| INGATORP / HENRIKSDAL Table and 2 chairs     |          0 |
+| Godis Julkola                                |          0 |
+| BACKARYD / RYDEB├äCK Table                    |          0 |
+| EKER├ûN Chair cushion                         |          0 |
+| INGOLF Stool                                 |          0 |
+| FALSTER Table+4 chairs w armrests            |          0 |
+| SKRUV Transformer with cord                  |          0 |
+| BERGSTENA Worktop                            |          0 |
+| KLASEN Trolley                               |          0 |
+| GAMLEBY Chair                                |          0 |
+| HEMNES Console table                         |          0 |
+| BACKARYD / OPPEBY Table                      |          0 |
+| UTRUSTA Pull-out waste sorting tray          |          0 |
+| FROSTA Stool                                 |          0 |
+| METOD Base cab 4 frnts/4 drawers             |          0 |
+| JOSEF Cabinet in/outdoor                     |          0 |
+| HYLLIS Shelving unit                         |          0 |
++----------------------------------------------+------------+
+
+/*6. show orderID, qty x price, employee name*/
+SELECT o.orderid as `Order ID`,
+sum(o.price) as Total,
+CONCAT(e.firstname, ' ', e.lastname) as `In Charge`
+from orderdetails o
+join orders r on o.orderID = r.`OrderID`
+join employees e on r.`EmployeeID` = e.`EmployeeID`
+group by o.`OrderID`, e.`EmployeeID`
+order by e.`FirstName` asc, o.price DESC;
+
++----------+----------+------------------+
+| Order ID | Total    | In Charge        |
++----------+----------+------------------+
+| OR001    |   873000 | Alfredo Cooper   |
+| OR017    |   475000 | Alfredo Cooper   |
+| OR020    | 11779000 | Audrey Robertson |
+| OR009    |  1799000 | Audrey Robertson |
+| OR015    |  2624000 | Audrey Robertson |
+| OR002    |  1380000 | Camille Edwards  |
+| OR011    |  2175000 | Cecil Wade       |
+| OR014    |   475000 | Clay Young       |
+| OR018    |   449000 | Clay Young       |
+| OR007    |  5997000 | Jan Long         |
+| OR013    |  1700000 | Kendra Jonston   |
+| OR006    |   495000 | Maurice Ford     |
+| OR005    |  2945000 | Melanie Pierce   |
+| OR019    |  8797000 | Mildred Sanders  |
+| OR003    |  4999000 | Mindy Cannon     |
+| OR016    |  2149000 | Mindy Cannon     |
+| OR004    |   498000 | Paula Tuckers    |
+| OR008    |  3975000 | Santago Goodwin  |
+| OR010    |   799000 | Vellma Carr      |
+| OR012    |   449000 | Wilma George     |
++----------+----------+------------------+
+
+/*7. bonus to employee where profit > 500k, show nama employee, jumlah profit, bonus employee*/
+select CONCAT(e.firstname, ' ', e.lastname) as Employee,
+round(sum(o.price) * 0.12) as Contribution,
+round(j.salary * 0.05) as Bonus
+from employees e
+join jobs j on e.`JobID` = j.`JobID`
+join orders r on e.`EmployeeID` = r.`EmployeeID`
+join orderdetails o on r.`OrderID` = o.`OrderID`
+GROUP BY e.`EmployeeID`, j.`Salary`
+having sum(o.`Price`) * 0.12 > 500000
+order by contribution desc;
+
++------------------+--------------+--------+
+| Employee         | Contribution | Bonus  |
++------------------+--------------+--------+
+| Audrey Robertson |      1944240 | 287500 |
+| Mildred Sanders  |      1055640 | 300000 |
+| Mindy Cannon     |       857760 | 300000 |
+| Jan Long         |       719640 | 287500 |
++------------------+--------------+--------+
+
+/*8. */
+SELECT CONCAT(
+        RPAD(CONCAT(e.firstname, ' ', e.lastname), 24, ' '),
+        RPAD(CASE
+                WHEN j.JobDesc LIKE 'Restaurant%' THEN 'works in a'
+                WHEN LEFT(j.JobDesc, 1) IN ('A','E','I','O','U') THEN 'works as an'
+                ELSE 'works as a'
+            END, 12, ' '),
+        RPAD(j.JobDesc, 40, ' '),
+        'in ', d.DeptName
+    ) AS `Employees information`
+FROM employees e
+JOIN jobs j ON e.`JobID` = j.`JobID`
+JOIN depts d ON e.`DeptID` = d.`DeptID`
+ORDER BY j.JobDesc, d.DeptName, CONCAT(e.firstname, ' ', e.lastname);
+
++--------------------------------------------------------------------------------------------------+
+| Employees information                                                                            |
++--------------------------------------------------------------------------------------------------+
+| Pete Cain               works as a  Communication and Interior Design       in Small Storage     |
+| Mildred Sanders         works as a  Customer Relations                      in Bathroom          |
+| Maurice Ford            works as a  Customer Relations                      in Decoration        |
+| Alfredo Cooper          works as a  Customer Relations                      in Dining            |
+| Kendra Jonston          works as a  Customer Relations                      in Lighting          |
+| Camille Edwards         works as a  Customer Relations                      in Living Room       |
+| Santago Goodwin         works as a  Customer Relations                      in Living Room       |
+| Cecil Wade              works as a  Customer Relations                      in METOD Kitchen     |
+| Vellma Carr             works as a  Customer Relations                      in Secondary Storage |
+| Mindy Cannon            works as a  Customer Relations                      in Workspaces        |
+| Leticia Hampton         works as a  Finance and Business Navigation         in Laundry           |
+| Christine Ingram        works as a  Human Resource                          in Hallway           |
+| Cary Santiago           works as a  Human Resource                          in Lighting          |
+| Aaron Moreno            works as a  Human Resource                          in METOD Kitchen     |
+| Leah Caldwell           works as a  Human Resource                          in Outdoor           |
+| Alice Fields            works as a  Human Resource                          in Small Storage     |
+| Ignacio Richardson      works as an IT                                      in Bedroom           |
+| Irma Luna               works as an IT                                      in Cooking           |
+| Jeremy Evan             works as an IT                                      in METOD Kitchen     |
+| Spencer Watts           works as an IT                                      in Workspaces        |
+| Jim Love                works as a  Logistics                               in Bedroom           |
+| Leah Webber             works as a  Logistics                               in Children's IKEA   |
+| Ted Stokes              works as a  Logistics                               in METOD Kitchen     |
+| Olga Barrett            works as a  Logistics                               in Textiles & Rugs   |
+| Dominicus Owen          works as a  Manager                                 in Cooking           |
+| Kevin Padawangi         works as a  Manager                                 in Foods & Beverages |
+| Ivan Jeremy             works as a  Manager                                 in Secondary Storage |
+| Estelle Burton          works as a  Marketing                               in Dining            |
+| Philip Burns            works as a  Marketing                               in METOD Kitchen     |
+| Jenna May               works as a  Marketing                               in Secondary Storage |
+| Ruth Mitchell           works as a  Marketing                               in Textiles & Rugs   |
+| Geranld Phelps          works in a  Restaurant (IKEA FOOD)                  in Foods & Beverages |
+| Martha Mills            works in a  Restaurant (IKEA FOOD)                  in Foods & Beverages |
+| Raul Diaz               works in a  Restaurant (IKEA FOOD)                  in Foods & Beverages |
+| Paula Tuckers           works as a  Sales                                   in Children's IKEA   |
+| Clay Young              works as a  Sales                                   in Decoration        |
+| Melanie Pierce          works as a  Sales                                   in Eating            |
+| Jan Long                works as a  Sales                                   in Hallway           |
+| Audrey Robertson        works as a  Sales                                   in Laundry           |
+| Wilma George            works as a  Sales                                   in METOD Kitchen     |
+| Sue Price               works as a  Sales                                   in Outdoor           |
++--------------------------------------------------------------------------------------------------+
+
+
+/*9. Disable Autcommit*/
+SET autocommit = 0;
+
+/*10. Salary Employee = 0 */
+UPDATE jobs SET Salary = 0;
++-------+--------+
+| jobid | salary |
++-------+--------+
+| J0001 |      0 |
+| J0002 |      0 |
+| J0003 |      0 |
+| J0004 |      0 |
+| J0005 |      0 |
+| J0006 |      0 |
+| J0007 |      0 |
+| J0008 |      0 |
+| J0009 |      0 |
+| J0010 |      0 |
++-------+--------+
+
+/*11. Savepoint*/
+SAVEPOINT ikea_gaji_nol;
+
+
+/*12. Update Employee FirstName to Tommy*/
+UPDATE employees SET FirstName = 'Tommy';
++------------------+
+| Nama Employee    |
++------------------+
+| Tommy Alexander  |
+| Tommy Jeremy     |
+| Tommy Padawangi  |
+| Tommy Owen       |
+| Tommy Evan       |
+| Tommy Caldwell   |
+| Tommy Cooper     |
+| Tommy Edwards    |
+| Tommy Love       |
+| Tommy Cannon     |
+| Tommy Tuckers    |
+| Tommy Diaz       |
+| Tommy Mills      |
+| Tommy Long       |
+| Tommy Carr       |
+| Tommy Hampton    |
+| Tommy Burns      |
+| Tommy Jonston    |
+| Tommy Young      |
+| Tommy Cain       |
+| Tommy Mitchell   |
+| Tommy George     |
+| Tommy Moreno     |
+| Tommy Stokes     |
+| Tommy Wade       |
+| Tommy Price      |
+| Tommy Burton     |
+| Tommy Goodwin    |
+| Tommy Richardson |
+| Tommy Watts      |
+| Tommy Webber     |
+| Tommy Ingram     |
+| Tommy May        |
+| Tommy Robertson  |
+| Tommy Sanders    |
+| Tommy Santiago   |
+| Tommy Phelps     |
+| Tommy Ford       |
+| Tommy Fields     |
+| Tommy Barrett    |
+| Tommy Luna       |
+| Tommy Pierce     |
++------------------+
+
+/*13. Rollback To Savepoint*/
+ROLLBACK TO SAVEPOINT ikea_gaji_nol;
++--------------------+
+| Nama Employee      |
++--------------------+
+| Kevin Alexander    |
+| Ivan Jeremy        |
+| Kevin Padawangi    |
+| Dominicus Owen     |
+| Jeremy Evan        |
+| Leah Caldwell      |
+| Alfredo Cooper     |
+| Camille Edwards    |
+| Jim Love           |
+| Mindy Cannon       |
+| Paula Tuckers      |
+| Raul Diaz          |
+| Martha Mills       |
+| Jan Long           |
+| Vellma Carr        |
+| Leticia Hampton    |
+| Philip Burns       |
+| Kendra Jonston     |
+| Clay Young         |
+| Pete Cain          |
+| Ruth Mitchell      |
+| Wilma George       |
+| Aaron Moreno       |
+| Ted Stokes         |
+| Cecil Wade         |
+| Sue Price          |
+| Estelle Burton     |
+| Santago Goodwin    |
+| Ignacio Richardson |
+| Spencer Watts      |
+| Leah Webber        |
+| Christine Ingram   |
+| Jenna May          |
+| Audrey Robertson   |
+| Mildred Sanders    |
+| Cary Santiago      |
+| Geranld Phelps     |
+| Maurice Ford       |
+| Alice Fields       |
+| Olga Barrett       |
+| Irma Luna          |
+| Melanie Pierce     |
++--------------------+
+
+/*14. Rollback before hacker masuk*/
+ROLLBACK;
++-------+----------+
+| jobid | salary   |
++-------+----------+
+| J0001 |  6000000 |
+| J0002 |  6000000 |
+| J0003 |  5500000 |
+| J0004 |  4750000 |
+| J0005 |  4500000 |
+| J0006 |  5750000 |
+| J0007 |  6250000 |
+| J0008 |  5500000 |
+| J0009 |  5250000 |
+| J0010 | 12500000 |
++-------+----------+
