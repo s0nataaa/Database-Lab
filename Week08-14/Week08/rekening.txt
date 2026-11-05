@@ -1,3 +1,6 @@
+github link :
+https://github.com/s0nataaa/Database-Lab/tree/main/Week08-14
+
 /*1. name, deptname, asc*/
 select concat(e.FirstName, ' ', e.LastName) as Name,
 d.DeptName
