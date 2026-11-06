@@ -1,4 +1,4 @@
---Github link = 
+--Github link = https://github.com/s0nataaa/Database-Lab/tree/main/Week08-14/Week09
 
 use ikea;
 
