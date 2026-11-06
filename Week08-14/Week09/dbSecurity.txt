@@ -1,0 +1,309 @@
+--Github link = 
+
+use ikea;
+
+
+-- 1. view_service_and_total
+create view view_service_and_total AS
+SELECT o.orderID as `Order ID`,
+DATE_FORMAT(o.orderdate, '%d %M %y') as `Date`,
+s.serviceDesc as `Service Type`,
+s.price as `Service`,
+sum(od.Price * od.Qty + s.Price) AS `Total`
+from orders o 
+join servicedetails d on o.orderID = d.orderID
+join services s on d.serviceID= s.`ServiceID`
+join orderdetails od on o.orderID = od.`OrderID`
+where s.price is not NULL
+group by o.`OrderID`, o.`OrderDate`, s.`ServiceID`, s.`ServiceDesc`, s.price;
+
++----------+----------------+----------------------------------------------------+---------+----------+
+| Order ID | Date           | Service Type                                       | Service | Total    |
++----------+----------------+----------------------------------------------------+---------+----------+
+| OR001    | 12 January 15  | Delivery Zone A (Tangerang, West Jakarta, Central  |  280000 |  2031000 |
+| OR002    | 23 January 15  | Delivery Zone B (North Jakarta, East Jakarta, Depo |  390000 |  7170000 |
+| OR005    | 11 February 15 | Delivery Zone A (Tangerang, West Jakarta, Central  |  280000 |  4405000 |
+| OR007    | 21 February 15 | Picking With Delivery Zone A (Tangerang, West Jaka |  780000 | 13397000 |
+| OR008    | 26 February 15 | Sofa Assembly - Full                               |  400000 |  4375000 |
+| OR011    | 08 March 15    | Cabinet Assembly and Basic Installation (include s |  800000 |  5475000 |
+| OR012    | 14 March 15    | Wall Drilling Service(4)                           |  100000 |   549000 |
+| OR013    | 29 March 15    | Delivery Zone B (North Jakarta, East Jakarta, Depo |  390000 |  3790000 |
+| OR015    | 20 April 15    | Sofa Assembly - Partial(legs & covers)             |  200000 |  4924000 |
+| OR018    | 13 May 15      | Laminated IKEA Worktop Cutting and Installation -  |  200000 |   649000 |
+| OR020    | 18 June 15     | Dismantling and Removal of Existing Kitchen - per  |  500000 | 12279000 |
++----------+----------------+----------------------------------------------------+---------+----------+
+
+-- 2. sales_by_year_month
+create view sales_by_year_month as
+select year(o.orderDate) as 'Year',
+monthname(o.orderDate) as 'Month',
+count(*) as 'Jumlah Transaksi',
+concat("Rp. ", sum(d.Price * d.Qty),',-') as 'Sales'
+from orders o
+join orderdetails d on o.`OrderID` = d.orderid
+GROUP By YEAR(O.orderdate), MONTH(o.`OrderDate`), MONTHNAME(o.`OrderDate`)
+order by year(o.`OrderDate`), MONTH(o.`OrderDate`);
+
+SELECT * from sales_by_year_month;
+
++------+----------+------------------+----------------+
+| Year | Month    | Jumlah Transaksi | Sales          |
++------+----------+------------------+----------------+
+| 2015 | January  |                6 | Rp. 12470000,- |
+| 2015 | February |               14 | Rp. 17641000,- |
+| 2015 | March    |                6 | Rp. 10322000,- |
+| 2015 | April    |                4 | Rp. 4799000,-  |
+| 2015 | May      |                7 | Rp. 13570000,- |
+| 2015 | June     |                1 | Rp. 11779000,- |
++------+----------+------------------+----------------+
+
+
+-- 3. nama_employees_sales
+create view nama_employees_sales as
+select e.employeeID as `Employee ID`, 
+CONCAT(e.firstName, ' ', e.lastname) AS `Employee Name`,
+j.jobdesc as `Job Name`,
+j.salary as `Employee Salary`
+from employees e
+join jobs j on e.jobid = j.`JobID`
+order by `Employee Name` ASC;
+
+select * from nama_employees_sales;
+
++-------------+--------------------+-----------------------------------+-----------------+
+| Employee ID | Employee Name      | Job Name                          | Employee Salary |
++-------------+--------------------+-----------------------------------+-----------------+
+| E0023       | Aaron Moreno       | Human Resource                    |         6000000 |
+| E0007       | Alfredo Cooper     | Customer Relations                |         6000000 |
+| E0039       | Alice Fields       | Human Resource                    |         6000000 |
+| E0034       | Audrey Robertson   | Sales                             |         5750000 |
+| E0008       | Camille Edwards    | Customer Relations                |         6000000 |
+| E0036       | Cary Santiago      | Human Resource                    |         6000000 |
+| E0025       | Cecil Wade         | Customer Relations                |         6000000 |
+| E0032       | Christine Ingram   | Human Resource                    |         6000000 |
+| E0019       | Clay Young         | Sales                             |         5750000 |
+| E0004       | Dominicus Owen     | Manager                           |        12500000 |
+| E0027       | Estelle Burton     | Marketing                         |         6250000 |
+| E0037       | Geranld Phelps     | Restaurant (IKEA FOOD)            |         4500000 |
+| E0029       | Ignacio Richardson | IT                                |         4750000 |
+| E0041       | Irma Luna          | IT                                |         4750000 |
+| E0002       | Ivan Jeremy        | Manager                           |        12500000 |
+| E0014       | Jan Long           | Sales                             |         5750000 |
+| E0033       | Jenna May          | Marketing                         |         6250000 |
+| E0005       | Jeremy Evan        | IT                                |         4750000 |
+| E0009       | Jim Love           | Logistics                         |         5500000 |
+| E0018       | Kendra Jonston     | Customer Relations                |         6000000 |
+| E0001       | Kevin Alexander    | Manager                           |        12500000 |
+| E0003       | Kevin Padawangi    | Manager                           |        12500000 |
+| E0006       | Leah Caldwell      | Human Resource                    |         6000000 |
+| E0031       | Leah Webber        | Logistics                         |         5500000 |
+| E0016       | Leticia Hampton    | Finance and Business Navigation   |         5500000 |
+| E0013       | Martha Mills       | Restaurant (IKEA FOOD)            |         4500000 |
+| E0038       | Maurice Ford       | Customer Relations                |         6000000 |
+| E0042       | Melanie Pierce     | Sales                             |         5750000 |
+| E0035       | Mildred Sanders    | Customer Relations                |         6000000 |
+| E0010       | Mindy Cannon       | Customer Relations                |         6000000 |
+| E0040       | Olga Barrett       | Logistics                         |         5500000 |
+| E0011       | Paula Tuckers      | Sales                             |         5750000 |
+| E0020       | Pete Cain          | Communication and Interior Design |         5250000 |
+| E0017       | Philip Burns       | Marketing                         |         6250000 |
+| E0012       | Raul Diaz          | Restaurant (IKEA FOOD)            |         4500000 |
+| E0021       | Ruth Mitchell      | Marketing                         |         6250000 |
+| E0028       | Santago Goodwin    | Customer Relations                |         6000000 |
+| E0030       | Spencer Watts      | IT                                |         4750000 |
+| E0026       | Sue Price          | Sales                             |         5750000 |
+| E0024       | Ted Stokes         | Logistics                         |         5500000 |
+| E0015       | Vellma Carr        | Customer Relations                |         6000000 |
+| E0022       | Wilma George       | Sales                             |         5750000 |
++-------------+--------------------+-----------------------------------+-----------------+
+
+
+-- 4. food_sales
+create view food_sales as
+select r.F_OrderID as ID,
+date_FORMAT(r.f_orderdate, '%d %M %y') as Date,
+concat(e.firstname, ' ', e.lastname) as `Employee Name`,
+p.productname as `Order Food`,
+f.price as Price,
+f.qty as Quanity,
+f.price * f.qty as Total
+from restaurant r
+join forderdetails f on r.`F_OrderID` = f.`F_OrderID`
+join products p on f.`ArticleID` = p.`ArticleID`
+join employees e on r.`EmployeeID` = e.`EmployeeID`;
+
+select * from food_sales;
+
++-------+----------------+----------------+------------------------+--------+---------+--------+
+| ID    | Date           | Employee Name  | Order Food             | Price  | Quanity | Total  |
++-------+----------------+----------------+------------------------+--------+---------+--------+
+| RR001 | 14 January 15  | Raul Diaz      | Smoked Salmon          | 110000 |       2 | 220000 |
+| RR002 | 14 January 15  | Raul Diaz      | Tasty ice cream        |   8000 |       2 |  16000 |
+| RR003 | 15 January 15  | Martha Mills   | Salmon Salad           | 105000 |       3 | 315000 |
+| RR004 | 16 January 15  | Raul Diaz      | Select of drinks       |  21000 |       3 |  63000 |
+| RR005 | 24 January 15  | Raul Diaz      | Swedish Poached Salmon |  75000 |       1 |  75000 |
+| RR006 | 08 February 15 | Martha Mills   | Select of drinks       |  14000 |       2 |  28000 |
+| RR006 | 08 February 15 | Martha Mills   | Smoked Salmon          |  55000 |       1 |  55000 |
+| RR007 | 17 February 15 | Martha Mills   | Swedish Poached Salmon | 150000 |       2 | 300000 |
+| RR007 | 17 February 15 | Martha Mills   | Chicken Hot dog        |  24000 |       3 |  72000 |
+| RR008 | 03 March 15    | Raul Diaz      | Select of drinks       |   7000 |       1 |   7000 |
+| RR009 | 22 March 15    | Martha Mills   | Salmon Salad           |  35000 |       1 |  35000 |
+| RR010 | 22 March 15    | Martha Mills   | Tasty ice cream        |   8000 |       2 |  16000 |
+| RR010 | 22 March 15    | Martha Mills   | Salmon Salad           |  35000 |       1 |  35000 |
+| RR011 | 19 April 15    | Raul Diaz      | Tasty ice cream        |   4000 |       1 |   4000 |
+| RR011 | 19 April 15    | Raul Diaz      | Smoked Salmon          | 110000 |       2 | 220000 |
+| RR012 | 19 April 15    | Raul Diaz      | Chicken Hot dog        |  16000 |       2 |  32000 |
+| RR013 | 21 April 15    | Martha Mills   | Select of drinks       |  21000 |       3 |  63000 |
+| RR014 | 25 April 15    | Geranld Phelps | Salmon Salad           |  70000 |       2 | 140000 |
+| RR015 | 17 May 15      | Geranld Phelps | Chicken Hot dog        |   8000 |       1 |   8000 |
+| RR016 | 19 May 15      | Raul Diaz      | Select of drinks       |  14000 |       2 |  28000 |
+| RR016 | 19 May 15      | Raul Diaz      | Smoked Salmon          | 110000 |       2 | 220000 |
+| RR017 | 19 May 15      | Geranld Phelps | Cinnamon Bun           |  42000 |       3 | 126000 |
+| RR018 | 21 May 15      | Geranld Phelps | Chicken Hot dog        |  24000 |       3 |  72000 |
+| RR019 | 03 June 15     | Raul Diaz      | Tasty ice cream        |  12000 |       3 |  36000 |
+| RR019 | 03 June 15     | Raul Diaz      | Cinnamon Bun           |  24000 |       2 |  48000 |
+| RR020 | 11 June 15     | Geranld Phelps | Smoked Salmon          | 165000 |       3 | 495000 |
++-------+----------------+----------------+------------------------+--------+---------+--------+
+
+--- 5. create user
+create user 'Aldwin'@'localhost' IDENTIFIED by 'aldsetiawan';
+create user 'Hansen'@'localhost' IDENTIFIED by 'hnsedrick';
+create user 'Reza'@'localhost' IDENTIFIED by 'rzasatyawijaya';
+create user 'Sintya'@'localhost' IDENTIFIED by 'styoktaviani';
+
+SELECT user, host FROM mysql.user;
+
++--------+-----------+
+| User   | Host      |
++--------+-----------+
+| Aldwin | localhost |
+| Hansen | localhost |
+| Reza   | localhost |
+| Sintya | localhost |
++--------+-----------+
+
+--- 6. grant select
+grant select on ikea.sales_by_year_month TO 'Aldwin'@'localhost' WITH grant option; 
+grant select on ikea.food_sales TO 'Aldwin'@'localhost' WITH grant option; 
+grant select on ikea.nama_employees_sales TO 'Hansen'@'localhost'; 
+grant select on ikea.view_service_and_total TO 'Reza'@'localhost';
+
+SHOW GRANTS FOR 'Aldwin'@'localhost';
+SHOW GRANTS FOR 'Hansen'@'localhost';
+SHOW GRANTS FOR 'Reza'@'localhost';
+
++---------------------------------------------------------------------------------------------------------------+
+| Grants for Aldwin@localhost                                                                                   |
++---------------------------------------------------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `Aldwin`@`localhost` IDENTIFIED BY PASSWORD '*0501BC8BED9FF95BF881135782B3EE04F2644773' |
+| GRANT SELECT ON `ikea`.`food_sales` TO `Aldwin`@`localhost` WITH GRANT OPTION                                 |
+| GRANT SELECT ON `ikea`.`sales_by_year_month` TO `Aldwin`@`localhost` WITH GRANT OPTION                        |
++---------------------------------------------------------------------------------------------------------------+
+3 rows in set (0.000 sec)
+
++---------------------------------------------------------------------------------------------------------------+
+| Grants for Hansen@localhost                                                                                   |
++---------------------------------------------------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `Hansen`@`localhost` IDENTIFIED BY PASSWORD '*F3FCB48370DF43A239691CF4B10FBE823ED6D188' |
+| GRANT SELECT ON `ikea`.`nama_employees_sales` TO `Hansen`@`localhost`                                         |
++---------------------------------------------------------------------------------------------------------------+
+2 rows in set (0.000 sec)
+
++-------------------------------------------------------------------------------------------------------------+
+| Grants for Reza@localhost                                                                                   |
++-------------------------------------------------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `Reza`@`localhost` IDENTIFIED BY PASSWORD '*380856A8F74D5552442D9F004C910CBB379C50CF' |
+| GRANT SELECT ON `ikea`.`view_service_and_total` TO `Reza`@`localhost`                                       |
++-------------------------------------------------------------------------------------------------------------+
+
+-- 7. grant select dari aldwin ke sintya, aldwin sudah diberikan grant option
+grant SELECT on ikea.food_sales to 'Sintya'@'localhost';
+
+SELECT `Year`,
+sum(`Jumlah Transaksi`) as `Total Transaksi`,
+concat('Rp. ', SUM(CAST(REPLACE(REPLACE(`Sales`, 'Rp. ', ''), ',-', '') AS UNSIGNED)),
+',-') AS `Pendapatan Bruto`
+from ikea.sales_by_year_month
+group by `Year`; -- Aldwin Report
+
++------+-----------------+------------------+
+| Year | Total Transaksi | Pendapatan Bruto |
++------+-----------------+------------------+
+| 2015 |              38 | Rp. 70581000,-   |
++------+-----------------+------------------+
+
+select `Order Food` as `Food`,
+concat('Rp. ', sum(`Total`), ',-') as `Sales`
+from ikea.food_sales
+group by `Order Food`; -- Sintya Report
+
++------------------------+---------------+
+| Food                   | Sales         |
++------------------------+---------------+
+| Chicken Hot dog        | Rp. 184000,-  |
+| Cinnamon Bun           | Rp. 174000,-  |
+| Salmon Salad           | Rp. 525000,-  |
+| Select of drinks       | Rp. 189000,-  |
+| Smoked Salmon          | Rp. 1210000,- |
+| Swedish Poached Salmon | Rp. 375000,-  |
+| Tasty ice cream        | Rp. 72000,-   |
++------------------------+---------------+
+
+-- 8. hansen report 4 gaji tertinggi
+select `Employee Name`, `Job Name` as `Job`, `Employee Salary` as `Salary`
+from ikea.nama_employees_sales
+order by `Employee Salary` desc, `Employee ID`
+limit 4;
+
++-----------------+---------+----------+
+| Employee Name   | Job     | Salary   |
++-----------------+---------+----------+
+| Kevin Alexander | Manager | 12500000 |
+| Ivan Jeremy     | Manager | 12500000 |
+| Kevin Padawangi | Manager | 12500000 |
+| Dominicus Owen  | Manager | 12500000 |
++-----------------+---------+----------+
+
+-- 9 Rexa report pendapatan delivery
+select CONCAT('Rp. ', SUM(`Service`), ',-') as `Total Pendapatan dari Delivery Service`
+from ikea.view_service_and_total
+where `Service Type` LIKE '%Delivery%';
+
++----------------------------------------+
+| Total Pendapatan dari Delivery Service |
++----------------------------------------+
+| Rp. 2120000,-                          |
++----------------------------------------+
+
+-- 10. drop user
+drop user
+'Aldwin'@'localhost', 
+'Hansen'@'localhost', 
+'Reza'@'localhost', 
+'Sintya'@'localhost';
+
+SELECT user, host FROM mysql.user;
+
++--------+-----------+
+| User   | Host      |
++--------+-----------+
+| root   | 127.0.0.1 |
+| root   | ::1       |
+| angel  | localhost |
+| gavin  | localhost |
+| pma    | localhost |
+| root   | localhost |
+| tenusa | localhost |
++--------+-----------+
+
+-- drop view
+drop view 
+view_service_and_total, 
+sales_by_year_month, 
+nama_employees_sales, 
+food_sales;
+
+SHOW FULL TABLES WHERE Table_type = 'VIEW';
+
+MariaDB [ikea]> SHOW FULL TABLES WHERE Table_type = 'VIEW';
+Empty set (0.001 sec)
