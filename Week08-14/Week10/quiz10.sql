@@ -70,7 +70,7 @@ begin
 select nama, ukuran, harga, stok
 from produk;
 end // 
-delimiter; 
+delimiter ; 
 
 -- TERUS TIBA TIBA ADA YANG DATENG, MAU BELI KAKTUS, MAU KAKTUS YANG UKURAN MINI ADA APA AJA, KASIR HARUS NAMPILIN SEMUA KATEORI --YANG MINI.
 delimiter //
@@ -104,7 +104,7 @@ select nama,ukuran,harga,stok,
 round(harga * (100 - promo) / 100) as `After Promo`
 from produk;
 end //
-delimiter;
+delimiter ;
 
 -- si pemilik toko mau hitung berapa total hpp stok x harga, harus pake local var, dan (Rp. )
 delimiter //
@@ -115,7 +115,17 @@ select sum(stok * harga) into total
 from produk;
 select concat('Rp. ', total) as calculate_total;
 end //
-delimiter;
+delimiter ;
+
+delimiter //
+create procedure calculate_totalnew()
+BEGIN
+declare total int default 0;
+select stok * harga into total
+from produk;
+select concat('Rp. ', total) as calculate_total;
+end //
+delimiter ;
 
 --si perawat kaktus mau liat stoknya, nama stok status, 0 habis, 1-5: menipis, 6 keatas aman, kalo pas dicari idnya ga ada, tampilin langsung pesan kaktus dicuri
 delimiter //
@@ -148,4 +158,3 @@ call stock_status('P001'); -- Aman
 call stock_status('P004'); -- Habis
 call stock_status('P999'); -- Dicuri
 
--- while loop, stok kaktus ,ganjil genap prima
